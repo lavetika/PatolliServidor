@@ -18,7 +18,6 @@ public class ComunicadorRedCliente implements Runnable {
     
     private ObjectOutputStream flujoSalidaDatos;
     private ObjectInputStream flujoEntradaDatos;
-    //private Jugador jugador;
 
     public ComunicadorRedCliente(Socket socket) throws IOException {
         this.socket = socket;
@@ -48,14 +47,22 @@ public class ComunicadorRedCliente implements Runnable {
             Mandadero mandadero=(Mandadero)this.flujoEntradaDatos.readObject();
             System.out.println(mandadero);
 
-            // SE COMPRUEBA SU TIPO, Y SE CANALIZA AL MANEJADOR APROPIADO
-            if(EnumServicio.INGRESAR_PARTIDA.equals(mandadero.getTipoServicio())){
-
-            }else{
-                System.out.println("No es el servicio que esperábamos");
+            switch (mandadero.getTipoServicio()) {
+                case INGRESAR_PARTIDA:
+                    System.out.println("No es el servicio que esperabamos");
+                    break;
+           
+                case CREAR_PARTIDA:
+                    System.out.println(mandadero.toString());
+                    break;
+                    
+                default:
+                    System.out.println("No es el servicio que esperábamos");
+                    break;
             }
             
-            // COMO DEBERÍA CONTESTAR AL SERVIDOR, QUE NOS FALTA???
+            
+            
             
         }catch(ClassCastException ex){
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "El objeto recibido no es un mensaje válido", ex);            

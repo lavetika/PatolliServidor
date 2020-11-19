@@ -14,7 +14,10 @@ import Dominio.Jugador;
 public class Servidor {
     
     
+    
     public boolean addJugador(Jugador jugador){
         return jugador != null;
     }
+    
+    
 }
