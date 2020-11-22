@@ -1,7 +1,6 @@
 package conexionServidor;
 
 import callMessage.Mandadero;
-import enumServicio.EnumServicio;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -44,7 +43,7 @@ public class ComunicadorRedCliente implements Runnable {
         try{
             this.flujoSalidaDatos.writeObject(m);
             this.flujoSalidaDatos.flush();
-            this.socket.close();
+//            this.socket.close();
         }catch(ClassCastException ex){
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "El objeto recibido no es un mandadero válido", ex);
         }catch(IOException ex){
@@ -57,7 +56,7 @@ public class ComunicadorRedCliente implements Runnable {
         try {
             // SE LEE EL OBJETO RECIBIDO
             Mandadero mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
-
+            
             switch (mandadero.getTipoServicio()) {
                 case INGRESAR_PARTIDA:
                     System.out.println("No es el servicio que esperabamos");
@@ -68,18 +67,24 @@ public class ComunicadorRedCliente implements Runnable {
                     System.out.println("Nel, ta mal");
                     break;
                 case ENVIAR_MENSAJE:
-//                    System.out.println(mandadero.toString());
+                    
+                    
+                    
                     ms=new ManejadorServicioMensaje(mandadero);
                     ms.ejecutar();
                     Mandadero msj= ms.getRespuesta();
                     responderPeticion(msj);
+                    System.out.println(msj);
                     System.out.println("Llegó el pedido, chicaaaas");
+                    
                     break;
 
                 default:
                     System.out.println("No es el servicio que esperábamos");
                     break;
             }
+            
+            
 
         } catch (ClassCastException ex) {
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "El objeto recibido no es un mensaje válido", ex);
