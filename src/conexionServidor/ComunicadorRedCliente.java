@@ -12,14 +12,18 @@ import manejadorServicios.ManejadorServicioMensaje;
 import manejadorServicios.ManejadorServicios;
 
 public class ComunicadorRedCliente implements Runnable {
+
     ManejadorServicios ms;
     private Socket socket;
+    ServidorSocket servidor;
+    //con el otro mensaje, sí
 
     private ObjectOutputStream flujoSalidaDatos;
     private ObjectInputStream flujoEntradaDatos;
 
-    public ComunicadorRedCliente(Socket socket) throws IOException {
+    public ComunicadorRedCliente(Socket socket, ServidorSocket servidor) throws IOException {
         this.socket = socket;
+        this.servidor = servidor;
 
         try {
             this.flujoSalidaDatos = new ObjectOutputStream(socket.getOutputStream());
@@ -38,16 +42,23 @@ public class ComunicadorRedCliente implements Runnable {
             throw ex;
         }
     }
-    
-    public void responderPeticion(Mandadero m){
-        try{
+
+    public void responderPeticion(Mandadero m) {
+        try {
             this.flujoSalidaDatos.writeObject(m);
             this.flujoSalidaDatos.flush();
 //            this.socket.close();
-        }catch(ClassCastException ex){
+        } catch (ClassCastException ex) {
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "El objeto recibido no es un mandadero válido", ex);
-        }catch(IOException ex){
+        } catch (IOException ex) {
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void responderATodos(Mandadero mandadero) {
+        for (int i = 0; i < servidor.getClientes().size(); i++) {
+            ComunicadorRedCliente clienteConectado = servidor.getClientes().get(i);    //según esto ya nos falta solo este método y la lista
+            clienteConectado.responderPeticion(mandadero);
         }
     }
 
@@ -55,36 +66,35 @@ public class ComunicadorRedCliente implements Runnable {
     public void run() {
         try {
             // SE LEE EL OBJETO RECIBIDO
-            Mandadero mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
             
-            switch (mandadero.getTipoServicio()) {
-                case INGRESAR_PARTIDA:
-                    System.out.println("No es el servicio que esperabamos");
-                    break;
+           Mandadero mandadero = null;
+            //no tenemos un while pa recibir muchas peticiones
+            do {
+                //este iba aquí
+                 mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
+                switch (mandadero.getTipoServicio()) {
+                    case INGRESAR_PARTIDA:
+                        System.out.println("No es el servicio que esperabamos");
+                        break;
 
-                case CREAR_PARTIDA:
-                    System.out.println(mandadero.toString());
-                    System.out.println("Nel, ta mal");
-                    break;
-                case ENVIAR_MENSAJE:
-                    
-                    
-                    
-                    ms=new ManejadorServicioMensaje(mandadero);
-                    ms.ejecutar();
-                    Mandadero msj= ms.getRespuesta();
-                    responderPeticion(msj);
-                    System.out.println(msj);
-                    System.out.println("Llegó el pedido, chicaaaas");
-                    
-                    break;
-
-                default:
-                    System.out.println("No es el servicio que esperábamos");
-                    break;
-            }
-            
-            
+                    case CREAR_PARTIDA:
+                        System.out.println(mandadero.toString());
+                        System.out.println("Nel, ta mal");
+                        break;
+                    case ENVIAR_MENSAJE:
+                        ms = new ManejadorServicioMensaje(mandadero);
+                        ms.ejecutar();
+                        Mandadero msj = ms.getRespuesta();
+                       ///responderPeticion(msj);
+                        System.out.println(msj);
+                        System.out.println("Llegó el pedido, chicaaaas");
+                        responderATodos(msj);
+                        break;
+                    default:
+                        System.out.println("No es el servicio que esperábamos");
+                        break;
+                }  //intentamos así?
+            } while (!mandadero.getRespuesta().get("mensaje").equals("adioh"));
 
         } catch (ClassCastException ex) {
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "El objeto recibido no es un mensaje válido", ex);
