@@ -15,8 +15,7 @@ public class ComunicadorRedCliente implements Runnable {
 
     ManejadorServicios ms;
     private Socket socket;
-    ServidorSocket servidor;
-    //con el otro mensaje, sí
+    ServidorSocket servidor;    
 
     private ObjectOutputStream flujoSalidaDatos;
     private ObjectInputStream flujoEntradaDatos;
@@ -64,13 +63,9 @@ public class ComunicadorRedCliente implements Runnable {
 
     @Override
     public void run() {
-        try {
-            // SE LEE EL OBJETO RECIBIDO
-            
-           Mandadero mandadero = null;
-            //no tenemos un while pa recibir muchas peticiones
-            do {
-                //este iba aquí
+        try {                        
+           Mandadero mandadero = null;            
+            do {               
                  mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
                 switch (mandadero.getTipoServicio()) {
                     case INGRESAR_PARTIDA:
@@ -79,21 +74,22 @@ public class ComunicadorRedCliente implements Runnable {
 
                     case CREAR_PARTIDA:
                         System.out.println(mandadero.toString());
-                        System.out.println("Nel, ta mal");
+                        System.out.println("Nel, está mal");
                         break;
+                        
                     case ENVIAR_MENSAJE:
                         ms = new ManejadorServicioMensaje(mandadero);
                         ms.ejecutar();
-                        Mandadero msj = ms.getRespuesta();
-                       ///responderPeticion(msj);
+                        Mandadero msj = ms.getRespuesta();                       
                         System.out.println(msj);
-                        System.out.println("Llegó el pedido, chicaaaas");
+                        System.out.println("Llegó el pedido");
                         responderATodos(msj);
                         break;
+                        
                     default:
                         System.out.println("No es el servicio que esperábamos");
                         break;
-                }  //intentamos así?
+                }
             } while (!mandadero.getRespuesta().get("mensaje").equals("adioh"));
 
         } catch (ClassCastException ex) {
