@@ -102,7 +102,7 @@ public class ComunicadorRedCliente implements Runnable {
                         System.out.println("No es el servicio que esperábamos");
                         break;
                 }
-            } while (!mandadero.getRespuesta().get("mensaje").equals("adioh"));
+            } while (mandadero != null);
 
         } catch (ClassCastException ex) {
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "El objeto recibido no es un mensaje válido", ex);

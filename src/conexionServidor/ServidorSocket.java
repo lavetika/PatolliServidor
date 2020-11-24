@@ -11,32 +11,42 @@ public class ServidorSocket {
     private final int PUERTO;
     private ServerSocket servidorSockets;
     private List<ComunicadorRedCliente> clientes;
-
-
+    private int maximoJugadores = 2;
+    
     public ServidorSocket(int puerto) {
         this.PUERTO = puerto;
         System.out.println("Creando el servidor...");
         clientes = new ArrayList<>();
     }
 
-    public void iniciar() throws IOException {
+    public void iniciar() throws Exception {
         try {
             System.out.println("Iniciando el servidor...");
-            this.servidorSockets = new ServerSocket(this.PUERTO);
+            this.servidorSockets = new ServerSocket(this.PUERTO, 2);
             System.out.printf("Servidor iniciado en el puerto: %d %n", this.PUERTO);
 
             while (true) {
                 Socket socket = this.servidorSockets.accept();
-                System.out.println("Nuevo cliente intentando conectarse...");
-                ComunicadorRedCliente cliente = new ComunicadorRedCliente(socket, this);
-                Thread hilo = new Thread(cliente);
-                hilo.start();
-                clientes.add(cliente);
 
-                System.out.println("Nuevo cliente conectado");
+                if (clientes.size() < maximoJugadores) {
+
+                    System.out.println("Nuevo cliente intentando conectarse...");
+                    ComunicadorRedCliente cliente = new ComunicadorRedCliente(socket, this);
+                    Thread hilo = new Thread(cliente);
+                    hilo.start();
+                    clientes.add(cliente);
+
+                    System.out.println("Nuevo cliente conectado");
+                    
+                }else{
+                    socket.close();
+                    throw new IOException("Mmmm, ayer se cerró pedido, chica ¯|_(ツ)_|¯");
+                }
+
+                
             }
         } catch (IOException ex) {
-            System.err.printf("Error %s %n", ex.getMessage());
+//            System.err.printf("Error %s %n", ex.getMessage());
             throw ex;
         }
     }
