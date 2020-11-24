@@ -4,6 +4,7 @@ import Control.Tablero;
 import Dominio.Apuesta;
 import Dominio.Ficha;
 import Dominio.Jugador;
+import conexionServidor.ComunicadorRedCliente;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface IServicios {
     public void realizarApuesta(Jugador jugadorApostador);
     public void ingresarPartida(String codigo, String nickname);
     public void iniciarPartida(List<Jugador> jugadores, Tablero tablero);
-    public void asignarTurno(List<Jugador> jugadores);
+    public void asignarTurno(List<ComunicadorRedCliente> jugadores);
     public void terminarPartida(Tablero tablero, List<Ficha> fichas, List<Jugador> jugadores);
     public void recibirMensaje(List<Jugador> jugadores, String mensaje);
     public void enviarMensaje(Jugador jugador, String mensaje);

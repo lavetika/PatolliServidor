@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import manejadorServicios.ManejadorServicioAsignarTurno;
 import manejadorServicios.ManejadorServicioMensaje;
 import manejadorServicios.ManejadorServicios;
 
@@ -15,7 +16,8 @@ public class ComunicadorRedCliente implements Runnable {
 
     ManejadorServicios ms;
     private Socket socket;
-    ServidorSocket servidor;    
+    ServidorSocket servidor;
+    boolean turno;
 
     private ObjectOutputStream flujoSalidaDatos;
     private ObjectInputStream flujoEntradaDatos;
@@ -23,6 +25,7 @@ public class ComunicadorRedCliente implements Runnable {
     public ComunicadorRedCliente(Socket socket, ServidorSocket servidor) throws IOException {
         this.socket = socket;
         this.servidor = servidor;
+        this.turno = false;
 
         try {
             this.flujoSalidaDatos = new ObjectOutputStream(socket.getOutputStream());
@@ -66,9 +69,10 @@ public class ComunicadorRedCliente implements Runnable {
         try {                        
            Mandadero mandadero = null;            
             do {               
-                 mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
+                mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
                 switch (mandadero.getTipoServicio()) {
                     case INGRESAR_PARTIDA:
+                        
                         System.out.println("No es el servicio que esperabamos");
                         break;
 
@@ -86,6 +90,14 @@ public class ComunicadorRedCliente implements Runnable {
                         responderATodos(msj);
                         break;
                         
+                    case ASIGNAR_TURNO:
+                        ms = new ManejadorServicioAsignarTurno(servidor.getClientes(), mandadero);
+                        Mandadero m = ms.getRespuesta();  
+                        System.out.println(m);
+                        System.out.println("Asignamos turno");
+                        
+                        break;
+                        
                     default:
                         System.out.println("No es el servicio que esperábamos");
                         break;
@@ -100,5 +112,8 @@ public class ComunicadorRedCliente implements Runnable {
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    
+    
 
 }

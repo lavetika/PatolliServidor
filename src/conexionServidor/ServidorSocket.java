@@ -12,6 +12,7 @@ public class ServidorSocket {
     private ServerSocket servidorSockets;
     private List<ComunicadorRedCliente> clientes;
 
+
     public ServidorSocket(int puerto) {
         this.PUERTO = puerto;
         System.out.println("Creando el servidor...");
