@@ -5,6 +5,7 @@
  */
 package manejadorServicios;
 
+import Control.Partida;
 import callMessage.Mandadero;
 import conexionServidor.ComunicadorRedCliente;
 //import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class ManejadorServicioAsignarTurno implements ManejadorServicios{
         System.out.println("Capirotada");
         System.out.println(jugadores);
         Collections.shuffle(jugadores);
+        Partida.getInstance().setJugadores(jugadores);
         mandadero.addRespuesta("jugadoresRandom", jugadores);
     }
     

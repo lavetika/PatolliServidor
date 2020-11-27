@@ -9,12 +9,12 @@ import conexionServidor.ComunicadorRedCliente;
 import java.util.List;
 
 public interface IServicios {
-    public void movimientoFicha(Ficha ficha, int cantidad); // DOING
+    public void movimientoFicha(Ficha ficha, int cantidad); // DOING (Laura)
     public void crearPartida(int numJugadores, int cantGemas, String nickname, Tablero tablero); //DOING
-    public void ingresarPartida(String codigo, String nickname); // DOING
+    public void ingresarPartida(String codigo, String nickname); // DOING (Annie)
     public void asignarTurno(List<ComunicadorRedCliente> jugadores); //DOING
-    public void abandonoJugador(Jugador jugador); // TO DO
-    public void establecerApuesta(Jugador jugador, Apuesta apuesta); // TO DO
+    public void abandonoJugador(Jugador jugador); // TO DO (Viejona)
+    public void establecerApuesta(Jugador jugador, Apuesta apuesta); // TO DO (DianaBb)
     public void realizarApuesta(Jugador jugadorApostador); // TO DO
     public void iniciarPartida(List<Jugador> jugadores, Tablero tablero); //TO DO
     public void terminarPartida(Tablero tablero, List<Ficha> fichas, List<Jugador> jugadores); //TO DO
@@ -22,5 +22,6 @@ public interface IServicios {
     public void enviarMensaje(Jugador jugador, String mensaje); // DONE
     public void lanzarCanias(Jugador jugador); //DESCARTADO
     public void generarTablero(int tamanio); // DESCARTADO
+    public void cambiarTurno();//DOING (Tengo mucha hambre xD)
 
 }

@@ -3,6 +3,7 @@ package Control;
 
 import Dominio.Jugador;
 import Graphics.Forma;
+import conexionServidor.ComunicadorRedCliente;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public class Partida {
 
-    private List<Jugador> jugadores;
+    private List<ComunicadorRedCliente> jugadores;
     private int cantJugadores;
     private Tablero tablero;
     private int codigoPartida;
@@ -62,11 +63,11 @@ public class Partida {
         this.cantJugadores = cantJugadores;
     }
     
-    public List<Jugador> getJugadores() {
+    public List<ComunicadorRedCliente> getJugadores() {
         return jugadores;
     }
 
-    public boolean addJugador(Jugador jugador) {
+    public boolean addJugador(ComunicadorRedCliente jugador) {
         if (this.getJugadores().size()!=Integer.MAX_VALUE) {
             return this.jugadores.add(jugador);
         }
@@ -74,7 +75,7 @@ public class Partida {
 
     }
 
-    public void setJugadores(List<Jugador> jugadores) {
+    public void setJugadores(List<ComunicadorRedCliente> jugadores) {
         this.jugadores = jugadores;
     }
 

@@ -4,6 +4,7 @@ package manejadorServicios;
 import Control.Partida;
 import Dominio.Jugador;
 import callMessage.Mandadero;
+import conexionServidor.ComunicadorRedCliente;
 
 
 public class ManejadorServicioCrearPartida implements ManejadorServicios{
@@ -29,7 +30,6 @@ public class ManejadorServicioCrearPartida implements ManejadorServicios{
     public void establecerPropiedades() {
         partida.setCantJugadores((int) mandadero.getParams().get("cantJugadores"));
         partida.setMaxApuesta((int) mandadero.getParams().get("maxApuesta"));
-        partida.addJugador((Jugador) mandadero.getParams().get("jugador"));
         partida.setEstado(true);
     }
 
