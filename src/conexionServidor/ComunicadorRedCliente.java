@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import manejadorServicios.ManejadorServicioAsignarTurno;
+import manejadorServicios.ManejadorServicioCrearPartida;
 import manejadorServicios.ManejadorServicioMensaje;
 import manejadorServicios.ManejadorServicios;
 
@@ -49,7 +50,6 @@ public class ComunicadorRedCliente implements Runnable {
         try {
             this.flujoSalidaDatos.writeObject(m);
             this.flujoSalidaDatos.flush();
-//            this.socket.close();
         } catch (ClassCastException ex) {
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "El objeto recibido no es un mandadero válido", ex);
         } catch (IOException ex) {
@@ -59,7 +59,7 @@ public class ComunicadorRedCliente implements Runnable {
 
     public void responderATodos(Mandadero mandadero) {
         for (int i = 0; i < servidor.getClientes().size(); i++) {
-            ComunicadorRedCliente clienteConectado = servidor.getClientes().get(i);    //según esto ya nos falta solo este método y la lista
+            ComunicadorRedCliente clienteConectado = servidor.getClientes().get(i);   
             clienteConectado.responderPeticion(mandadero);
         }
     }
@@ -67,49 +67,51 @@ public class ComunicadorRedCliente implements Runnable {
     @Override
     public void run() {
         try {                        
-           Mandadero mandadero = null;            
+           Mandadero mandadero = null;
+           Mandadero msj;
             do {               
                 mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
                 switch (mandadero.getTipoServicio()) {
                     case INGRESAR_PARTIDA:
-                        
                         System.out.println("No es el servicio que esperabamos");
                         break;
 
                     case CREAR_PARTIDA:
-                        System.out.println(mandadero.toString());
-                        System.out.println("Nel, está mal");
+                        ms = new ManejadorServicioCrearPartida(mandadero);
+                        ms.ejecutar();
+                        msj = ms.getRespuesta();
+                        responderPeticion(msj);
+                        if (mandadero.getParams().size() <= 0) {
+                            servidor.getClientes().remove(this);
+                        }
                         break;
-                        
+
                     case ENVIAR_MENSAJE:
                         ms = new ManejadorServicioMensaje(mandadero);
                         ms.ejecutar();
-                        Mandadero msj = ms.getRespuesta();                       
-                        System.out.println(msj);
+                        msj = ms.getRespuesta();                      
                         System.out.println("Llegó el pedido");
                         responderATodos(msj);
                         break;
                         
                     case ASIGNAR_TURNO:
                         ms = new ManejadorServicioAsignarTurno(servidor.getClientes(), mandadero);
-                        Mandadero m = ms.getRespuesta();  
-                        System.out.println(m);
+                        msj = ms.getRespuesta();  
+                        System.out.println(msj);
                         System.out.println("Asignamos turno");
-                        
                         break;
-                        
-                    default:
+                 default:
                         System.out.println("No es el servicio que esperábamos");
                         break;
                 }
             } while (mandadero != null);
 
         } catch (ClassCastException ex) {
-            Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "El objeto recibido no es un mensaje válido", ex);
+            Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "este 3", ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "No se encontró la clase", ex);
+            Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "este 2", ex);
         } catch (IOException ex) {
-            Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
 
