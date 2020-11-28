@@ -1,5 +1,6 @@
 package conexionServidor;
 
+import Control.Partida;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,12 +12,13 @@ public class ServidorSocket {
     private final int PUERTO;
     private ServerSocket servidorSockets;
     private List<ComunicadorRedCliente> clientes;
-    private int maximoJugadores = 2;
+    private int maximoJugadores;
     
     public ServidorSocket(int puerto) {
         this.PUERTO = puerto;
         System.out.println("Creando el servidor...");
         clientes = new ArrayList<>();
+        this.maximoJugadores = 2;
     }
 
     public void iniciar() throws Exception {
@@ -28,8 +30,10 @@ public class ServidorSocket {
             while (true) {
                 Socket socket = this.servidorSockets.accept();
 
-                if (clientes.size() < maximoJugadores) {
-
+                if (clientes.size() <= maximoJugadores) {
+                    if(Partida.getInstance().isEstado()){
+                        maximoJugadores = Partida.getInstance().getCantJugadores()-1;//la cantidad de jugadores menos el jsjsj
+                    }//maybe
                     System.out.println("Nuevo cliente intentando conectarse...");
                     ComunicadorRedCliente cliente = new ComunicadorRedCliente(socket, this);
                     Thread hilo = new Thread(cliente);
@@ -43,6 +47,7 @@ public class ServidorSocket {
                     throw new IOException("Mmmm, ayer se cerró pedido, chica ¯|_(ツ)_|¯");
                 }
 
+
                 
             }
         } catch (IOException ex) {
@@ -54,5 +59,7 @@ public class ServidorSocket {
     public List<ComunicadorRedCliente> getClientes() {
         return clientes;
     }
+    
+  
 
 }

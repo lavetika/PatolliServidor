@@ -21,6 +21,7 @@ public class Partida {
     private List<Forma> posicion;
     private static Partida partida;
     private boolean estado;
+    private int tamTablero;
     
 
     public static Partida getInstance() {
@@ -102,4 +103,14 @@ public class Partida {
     public void setPosicion(List<Forma> posicion) {
         this.posicion = posicion;
     }
+
+    public int getTamTablero() {
+        return tamTablero;
+    }
+
+    public void setTamTablero(int tamTablero) {
+        this.tamTablero = tamTablero;
+    }
+    
+    
 }

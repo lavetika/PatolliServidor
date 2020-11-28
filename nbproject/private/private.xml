@@ -3,12 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/laura/Google%20Drive/ITSON/Semestre%205/Arquitectura%20de%20Software/Septimo%20avance%20GIT/PatolliServidor/src/conexionServidor/ServidorSocket.java</file>
-            <file>file:/C:/Users/laura/Google%20Drive/ITSON/Semestre%205/Arquitectura%20de%20Software/Septimo%20avance%20GIT/PatolliServidor/src/conexionServidor/ComunicadorRedCliente.java</file>
-            <file>file:/C:/Users/laura/Google%20Drive/ITSON/Semestre%205/Arquitectura%20de%20Software/Septimo%20avance%20GIT/PatolliServidor/src/logicaServicio/IServicios.java</file>
-            <file>file:/C:/Users/laura/Google%20Drive/ITSON/Semestre%205/Arquitectura%20de%20Software/Septimo%20avance%20GIT/PatolliServidor/src/Control/Partida.java</file>
-            <file>file:/C:/Users/laura/Google%20Drive/ITSON/Semestre%205/Arquitectura%20de%20Software/Septimo%20avance%20GIT/PatolliServidor/src/manejadorServicios/ManejadorServicioCrearPartida.java</file>
-            <file>file:/C:/Users/laura/Google%20Drive/ITSON/Semestre%205/Arquitectura%20de%20Software/Septimo%20avance%20GIT/PatolliServidor/src/manejadorServicios/ManejadorServicioAsignarTurno.java</file>
+            <file>file:/C:/Users/anniy/OneDrive/Documentos/Anni/0ITSON/0%20Quinto%20Semestre/Arquitectura%20de%20Software/Patolli/PatolliServidor/src/Control/Partida.java</file>
+            <file>file:/C:/Users/anniy/OneDrive/Documentos/Anni/0ITSON/0%20Quinto%20Semestre/Arquitectura%20de%20Software/Patolli/PatolliServidor/src/manejadorServicios/ManejadorServicioCrearPartida.java</file>
+            <file>file:/C:/Users/anniy/OneDrive/Documentos/Anni/0ITSON/0%20Quinto%20Semestre/Arquitectura%20de%20Software/Patolli/PatolliServidor/src/manejadorServicios/ManejadorServicioIngresarPartida.java</file>
+            <file>file:/C:/Users/anniy/OneDrive/Documentos/Anni/0ITSON/0%20Quinto%20Semestre/Arquitectura%20de%20Software/Patolli/PatolliServidor/src/conexionServidor/ServidorSocket.java</file>
+            <file>file:/C:/Users/anniy/OneDrive/Documentos/Anni/0ITSON/0%20Quinto%20Semestre/Arquitectura%20de%20Software/Patolli/PatolliServidor/src/conexionServidor/ComunicadorRedCliente.java</file>
         </group>
     </open-files>
 </project-private>

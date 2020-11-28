@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import manejadorServicios.ManejadorServicioAsignarTurno;
 import manejadorServicios.ManejadorServicioCrearPartida;
+import manejadorServicios.ManejadorServicioIngresarPartida;
 import manejadorServicios.ManejadorServicioMensaje;
 import manejadorServicios.ManejadorServicios;
 
@@ -73,7 +74,10 @@ public class ComunicadorRedCliente implements Runnable {
                 mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
                 switch (mandadero.getTipoServicio()) {
                     case INGRESAR_PARTIDA:
-                        System.out.println("No es el servicio que esperabamos");
+                        ms = new ManejadorServicioIngresarPartida(mandadero);
+                        ms.ejecutar();
+                        msj = ms.getRespuesta();
+                        responderPeticion(msj);
                         break;
 
                     case CREAR_PARTIDA:

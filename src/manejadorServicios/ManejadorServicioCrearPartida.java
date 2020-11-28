@@ -30,6 +30,7 @@ public class ManejadorServicioCrearPartida implements ManejadorServicios{
     public void establecerPropiedades() {
         partida.setCantJugadores((int) mandadero.getParams().get("cantJugadores"));
         partida.setMaxApuesta((int) mandadero.getParams().get("maxApuesta"));
+        partida.setTamTablero((int) mandadero.getParams().get("tamTablero"));
         partida.setEstado(true);
     }
 
