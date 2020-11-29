@@ -113,6 +113,7 @@ public class ComunicadorRedCliente implements Runnable {
                         ms = new ManejadorServicioAbandono(mandadero, this, servidor.getClientes());
                         ms.ejecutar();
                         msj = ms.getRespuesta();
+                        responderPeticion(msj);
                         System.out.println(msj);
                         System.out.println("Abandonamos jugador");
                         System.out.println("Jugador removido en Servidor: " + servidor.getClientes());
