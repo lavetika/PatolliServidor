@@ -57,6 +57,7 @@ public class ServidorSocket {
     }
 
     public List<ComunicadorRedCliente> getClientes() {
+        System.out.println("Lista de clientes en ServidorSocket: "+clientes);
         return clientes;
     }
     

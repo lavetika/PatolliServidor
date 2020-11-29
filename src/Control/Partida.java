@@ -28,10 +28,7 @@ public class Partida {
         
         if (partida == null) {
             partida = new Partida();
-            System.out.println("Esta es nueva, como molestas..");
-        } else {
-            System.out.println("Ya se instanceo, no molestes...");
-        }
+        } 
         return partida;
     }
 

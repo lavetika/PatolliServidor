@@ -31,7 +31,9 @@ public class ManejadorServicioAsignarTurno implements ManejadorServicios{
         System.out.println("Capirotada");
         System.out.println(jugadores);
         Collections.shuffle(jugadores);
+        System.out.println("Lista de comunicador red cliente:" +jugadores);
         Partida.getInstance().setJugadores(jugadores);
+//        System.out.println("Lista de ");
         mandadero.addRespuesta("jugadoresRandom", jugadores);
     }
     

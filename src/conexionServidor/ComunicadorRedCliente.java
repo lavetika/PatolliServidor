@@ -1,5 +1,6 @@
 package conexionServidor;
 
+import Control.Partida;
 import callMessage.Mandadero;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import manejadorServicios.ManejadorServicioAbandono;
 import manejadorServicios.ManejadorServicioAsignarTurno;
 import manejadorServicios.ManejadorServicioCrearPartida;
 import manejadorServicios.ManejadorServicioIngresarPartida;
@@ -60,17 +62,17 @@ public class ComunicadorRedCliente implements Runnable {
 
     public void responderATodos(Mandadero mandadero) {
         for (int i = 0; i < servidor.getClientes().size(); i++) {
-            ComunicadorRedCliente clienteConectado = servidor.getClientes().get(i);   
+            ComunicadorRedCliente clienteConectado = servidor.getClientes().get(i);
             clienteConectado.responderPeticion(mandadero);
         }
     }
 
     @Override
     public void run() {
-        try {                        
-           Mandadero mandadero = null;
-           Mandadero msj;
-            do {               
+        try {
+            Mandadero mandadero = null;
+            Mandadero msj;
+            do {
                 mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
                 switch (mandadero.getTipoServicio()) {
                     case INGRESAR_PARTIDA:
@@ -93,18 +95,31 @@ public class ComunicadorRedCliente implements Runnable {
                     case ENVIAR_MENSAJE:
                         ms = new ManejadorServicioMensaje(mandadero);
                         ms.ejecutar();
-                        msj = ms.getRespuesta();                      
+                        msj = ms.getRespuesta();
                         System.out.println("Llegó el pedido");
                         responderATodos(msj);
                         break;
-                        
+
                     case ASIGNAR_TURNO:
                         ms = new ManejadorServicioAsignarTurno(servidor.getClientes(), mandadero);
-                        msj = ms.getRespuesta();  
+                        msj = ms.getRespuesta();
                         System.out.println(msj);
                         System.out.println("Asignamos turno");
+                        System.out.println("SS: " + servidor.getClientes());
                         break;
-                 default:
+
+                    case ABANDONO_JUGADOR:
+//                        System.out.println("Sin remover: "+servidor.getClientes());
+                        ms = new ManejadorServicioAbandono(mandadero, this, servidor.getClientes());
+                        ms.ejecutar();
+                        msj = ms.getRespuesta();
+                        System.out.println(msj);
+                        System.out.println("Abandonamos jugador");
+                        System.out.println("Jugador removido en Servidor: " + servidor.getClientes());
+//                        System.out.println("Jugador removido en Partida: "+Partida.getInstance().getJugadores());
+                        
+                        break;
+                    default:
                         System.out.println("No es el servicio que esperábamos");
                         break;
                 }
@@ -115,11 +130,8 @@ public class ComunicadorRedCliente implements Runnable {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ComunicadorRedCliente.class.getName()).log(Level.SEVERE, "este 2", ex);
         } catch (IOException ex) {
-            
+
         }
     }
-
-    
-    
 
 }
