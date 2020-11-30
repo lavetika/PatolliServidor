@@ -29,11 +29,13 @@ public class ManejadorServicioAbandono implements ManejadorServicios {
 
     @Override
     public void ejecutar() {
-//                Partida.getInstance().getJugadores().remove(jugador);
         clientes.remove(jugador);
-        String respuesta = "removido";
-        mandadero.addRespuesta("abandono", respuesta);
-
+        mandadero.addRespuesta("abandono", "removido");
+        
+        if (clientes.isEmpty()) {
+            Partida.getInstance().setEstado(false);
+            Partida.getInstance().setJugadorActual(null);
+        }
     }
 
     @Override

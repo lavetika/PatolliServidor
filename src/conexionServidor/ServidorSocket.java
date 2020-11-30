@@ -44,7 +44,7 @@ public class ServidorSocket {
                     
                 }else{
                     socket.close();
-                    throw new IOException("Mmmm, ayer se cerró pedido, chica ¯|_(ツ)_|¯");
+//                    throw new IOException("Mmmm, ayer se cerró pedido, chica ¯|_(ツ)_|¯");
                 }
 
 
