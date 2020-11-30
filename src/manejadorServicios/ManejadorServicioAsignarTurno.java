@@ -33,6 +33,7 @@ public class ManejadorServicioAsignarTurno implements ManejadorServicios{
         Collections.shuffle(jugadores);
         System.out.println("Lista de comunicador red cliente:" +jugadores);
         Partida.getInstance().setJugadores(jugadores);
+        Partida.getInstance().setJugadorActual(jugadores.get(0));
 //        System.out.println("Lista de ");
         mandadero.addRespuesta("jugadoresRandom", jugadores);
     }

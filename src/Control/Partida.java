@@ -22,6 +22,9 @@ public class Partida {
     private static Partida partida;
     private boolean estado;
     private int tamTablero;
+    private ComunicadorRedCliente jugadorActual;
+
+  
     
 
     public static Partida getInstance() {
@@ -109,5 +112,11 @@ public class Partida {
         this.tamTablero = tamTablero;
     }
     
-    
+      public ComunicadorRedCliente getJugadorActual() {
+        return jugadorActual;
+    }
+
+    public void setJugadorActual(ComunicadorRedCliente jugadorActual) {
+        this.jugadorActual = jugadorActual;
+    }
 }

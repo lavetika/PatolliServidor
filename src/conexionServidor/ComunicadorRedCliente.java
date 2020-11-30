@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import manejadorServicios.ManejadorServicioAbandono;
 import manejadorServicios.ManejadorServicioAsignarTurno;
+import manejadorServicios.ManejadorServicioCambiarTurno;
+import manejadorServicios.ManejadorServicioConfirmarTurno;
 import manejadorServicios.ManejadorServicioCrearPartida;
 import manejadorServicios.ManejadorServicioIngresarPartida;
 import manejadorServicios.ManejadorServicioMensaje;
@@ -67,9 +69,18 @@ public class ComunicadorRedCliente implements Runnable {
         }
     }
 
+    public void turnosJugadores(Mandadero mandadero) {
+        for (ComunicadorRedCliente jugador : servidor.getClientes()) {
+            ms = new ManejadorServicioConfirmarTurno(mandadero, jugador);
+            ms.ejecutar();
+            Mandadero msj = ms.getRespuesta();
+            jugador.responderPeticion(msj);
+        } 
+    }
+
     @Override
     public void run() {
-        try {
+        try {//mande
             Mandadero mandadero = null;
             Mandadero msj;
             do {
@@ -118,8 +129,16 @@ public class ComunicadorRedCliente implements Runnable {
                         System.out.println("Abandonamos jugador");
                         System.out.println("Jugador removido en Servidor: " + servidor.getClientes());
 //                        System.out.println("Jugador removido en Partida: "+Partida.getInstance().getJugadores());
-                        
+
                         break;
+                    case MOVIMIENTO_FICHA:
+                        ms = new ManejadorServicioCambiarTurno(mandadero);
+                        msj = ms.getRespuesta();
+                        //responderPeticion(msj);
+                        System.out.println(msj);
+                        turnosJugadores(mandadero);
+                        break;
+
                     default:
                         System.out.println("No es el servicio que esperábamos");
                         break;
@@ -133,6 +152,7 @@ public class ComunicadorRedCliente implements Runnable {
         } catch (IOException ex) {
 
         }
+
     }
 
 }
