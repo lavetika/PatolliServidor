@@ -7,6 +7,7 @@ package manejadorServicios;
 
 import callMessage.Mandadero;
 import conexionServidor.ComunicadorRedCliente;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,8 +28,13 @@ public class ManejadorPosicion implements ManejadorServicios{
     
     @Override
     public void ejecutar() {
-        int posicion = jugadores.indexOf(jugador)+1;
-        mandadero.addRespuesta("posicion", posicion);
+//        int posicion = jugadores.indexOf(jugador);
+//        mandadero.addRespuesta("posicion", posicion);
+    List<String> nicknames= new ArrayList<>();
+        for (ComunicadorRedCliente jugador : jugadores) {
+            nicknames.add(jugador.getJugador().getNickname());
+        }
+        mandadero.addRespuesta("posiciones", nicknames);
     }
 
     @Override

@@ -44,6 +44,10 @@ public class ComunicadorRedCliente implements Runnable {
         }
     }
 
+    public Jugador getJugador() {
+        return jugador;
+    }
+    
     public void desconectar() throws IOException {
         try {
             this.socket.close();
@@ -97,7 +101,7 @@ public class ComunicadorRedCliente implements Runnable {
                         ManejadorPosicion mo = new ManejadorPosicion(mandadero, this, servidor.getClientes());
                         mo.ejecutar();
                         msj = mo.getRespuesta();
-                        responderPeticion(msj);
+                        responderATodos(msj);
 
                         break; 
 
