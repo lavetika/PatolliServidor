@@ -36,6 +36,7 @@ public class ManejadorServicioCrearPartida implements ManejadorServicios{
 
     @Override
     public Mandadero getRespuesta() {
+        
         return mandadero;
     }
 }

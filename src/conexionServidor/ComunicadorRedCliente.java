@@ -1,6 +1,6 @@
 package conexionServidor;
 
-import Control.Partida;
+import Dominio.Jugador;
 import callMessage.Mandadero;
 
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import manejadorServicios.ManejadorPosicion;
 import manejadorServicios.ManejadorServicioAbandono;
 import manejadorServicios.ManejadorServicioAsignarTurno;
 import manejadorServicios.ManejadorServicioCambiarTurno;
@@ -24,6 +25,7 @@ public class ComunicadorRedCliente implements Runnable {
     private Socket socket;
     ServidorSocket servidor;
     boolean turno;
+    Jugador jugador;
 
     private ObjectOutputStream flujoSalidaDatos;
     private ObjectInputStream flujoEntradaDatos;
@@ -75,7 +77,7 @@ public class ComunicadorRedCliente implements Runnable {
             ms.ejecutar();
             Mandadero msj = ms.getRespuesta();
             jugador.responderPeticion(msj);
-        } 
+        }
     }
 
     @Override
@@ -88,18 +90,32 @@ public class ComunicadorRedCliente implements Runnable {
                 switch (mandadero.getTipoServicio()) {
                     case INGRESAR_PARTIDA:
                         ms = new ManejadorServicioIngresarPartida(mandadero);
-                        ms.ejecutar();
+                        ms.ejecutar(); 
                         msj = ms.getRespuesta();
+
+                        this.jugador = (Jugador) mandadero.getParams().get("jugador");
+                        ManejadorPosicion mo = new ManejadorPosicion(mandadero, this, servidor.getClientes());
+                        mo.ejecutar();
+                        msj = mo.getRespuesta();
                         responderPeticion(msj);
-                        break;
+
+                        break; 
 
                     case CREAR_PARTIDA:
+
                         ms = new ManejadorServicioCrearPartida(mandadero);
                         ms.ejecutar();
                         msj = ms.getRespuesta();
-                        responderPeticion(msj);
+
                         if (mandadero.getParams().size() <= 0) {
                             servidor.getClientes().remove(this);
+                            responderPeticion(msj);
+                        } else {
+                            this.jugador = (Jugador) mandadero.getParams().get("jugador");
+                            ManejadorPosicion mp = new ManejadorPosicion(mandadero, this, servidor.getClientes());
+                            mp.ejecutar();
+                            msj = mp.getRespuesta();
+                            responderPeticion(msj); 
                         }
                         break;
 

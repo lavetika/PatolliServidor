@@ -2,7 +2,7 @@
 package Control;
 
 import Dominio.Jugador;
-import Graphics.Forma;
+//import Graphics.Forma;
 import conexionServidor.ComunicadorRedCliente;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +15,10 @@ public class Partida {
 
     private List<ComunicadorRedCliente> jugadores;
     private int cantJugadores;
-    private Tablero tablero;
+//    private Tablero tablero;
     private int codigoPartida;
     private int maxApuesta;
-    private List<Forma> posicion;
+//    private List<Forma> posicion;
     private static Partida partida;
     private boolean estado;
     private int tamTablero;
@@ -37,7 +37,7 @@ public class Partida {
 
     private Partida() {
         this.jugadores = new ArrayList<>();
-        this.posicion = new ArrayList<>();
+//        this.posicion = new ArrayList<>();
     }
 
     public boolean isEstado() {
@@ -80,13 +80,13 @@ public class Partida {
         this.jugadores = jugadores;
     }
 
-    public Tablero getTablero() {
-        return tablero;
-    }
-
-    public void setTablero(Tablero tablero) {
-        this.tablero = tablero;
-    }
+//    public Tablero getTablero() {
+//        return tablero;
+//    }
+//
+//    public void setTablero(Tablero tablero) {
+//        this.tablero = tablero;
+//    }
 
     public int getCodigoPartida() {
         return codigoPartida;
@@ -96,13 +96,13 @@ public class Partida {
         this.codigoPartida = codigoPartida;
     }
 
-    public List<Forma> getPosicion() {
-        return posicion;
-    }
-
-    public void setPosicion(List<Forma> posicion) {
-        this.posicion = posicion;
-    }
+//    public List<Forma> getPosicion() {
+//        return posicion;
+//    }
+//
+//    public void setPosicion(List<Forma> posicion) {
+//        this.posicion = posicion;
+//    }
 
     public int getTamTablero() {
         return tamTablero;
