@@ -140,16 +140,13 @@ public class ComunicadorRedCliente implements Runnable {
                         break;
 
                     case ABANDONO_JUGADOR:
-//                        System.out.println("Sin remover: "+servidor.getClientes());
                         ms = new ManejadorServicioAbandono(mandadero, this, servidor.getClientes());
                         ms.ejecutar();
-                        msj = ms.getRespuesta();
-                        responderPeticion(msj);
-                        System.out.println(msj);
-                        System.out.println("Abandonamos jugador");
-                        System.out.println("Jugador removido en Servidor: " + servidor.getClientes());
-//                        System.out.println("Jugador removido en Partida: "+Partida.getInstance().getJugadores());
-
+                        ManejadorPosicion mp = new ManejadorPosicion(mandadero, this, servidor.getClientes());
+                        mp.ejecutar();
+                        msj = mp.getRespuesta();
+                        responderPeticion(msj); //utiliza este por que ya no esta el solicitante en la lista de clientes de servidor.
+                        responderATodos(msj);
                         break;
                     case MOVIMIENTO_FICHA:
                         ms = new ManejadorServicioCambiarTurno(mandadero);
