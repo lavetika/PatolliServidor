@@ -5,6 +5,9 @@
  */
 package manejadorServicios;
 
+import Control.Partida;
+import Dominio.Jugador;
+import Dominio.TipoJugador;
 import callMessage.Mandadero;
 import conexionServidor.ComunicadorRedCliente;
 import java.util.ArrayList;
@@ -14,32 +17,38 @@ import java.util.List;
  *
  * @author laura
  */
-public class ManejadorPosicion implements ManejadorServicios{
+public class ManejadorServicioPosicion implements ManejadorServicios {
 
     Mandadero mandadero;
     ComunicadorRedCliente jugador;
     List<ComunicadorRedCliente> jugadores;
-    
-    public ManejadorPosicion(Mandadero mandadero, ComunicadorRedCliente jugador, List<ComunicadorRedCliente> jugadores) {
+
+    public ManejadorServicioPosicion(Mandadero mandadero, ComunicadorRedCliente jugador, List<ComunicadorRedCliente> jugadores) {
         this.mandadero = mandadero;
         this.jugador = jugador;
         this.jugadores = jugadores;
     }
-    
+
     @Override
     public void ejecutar() {
-//        int posicion = jugadores.indexOf(jugador);
-//        mandadero.addRespuesta("posicion", posicion);
-    List<String> nicknames= new ArrayList<>();
-        for (ComunicadorRedCliente jugador : jugadores) {
-            nicknames.add(jugador.getJugador().getNickname());
+        List<Jugador> listaJugadores = new ArrayList<>();
+
+        for (int i = 0; i < this.jugadores.size(); i++) {
+
+            listaJugadores.add(this.jugadores.get(i).getJugador());
         }
-        mandadero.addRespuesta("posiciones", nicknames);
+
+        mandadero.addRespuesta("posiciones", listaJugadores);
+        
+        if (jugador.getHost() != null) {
+            Jugador jugadorH = jugador.getHost();
+            mandadero.addRespuesta("host", jugadorH);
+        }
     }
 
     @Override
     public Mandadero getRespuesta() {
         return mandadero;
     }
-    
+
 }

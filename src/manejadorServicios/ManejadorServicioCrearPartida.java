@@ -1,13 +1,9 @@
-
 package manejadorServicios;
 
 import Control.Partida;
-import Dominio.Jugador;
 import callMessage.Mandadero;
-import conexionServidor.ComunicadorRedCliente;
 
-
-public class ManejadorServicioCrearPartida implements ManejadorServicios{
+public class ManejadorServicioCrearPartida implements ManejadorServicios {
 
     private Mandadero mandadero;
     private Partida partida;
@@ -24,6 +20,8 @@ public class ManejadorServicioCrearPartida implements ManejadorServicios{
             establecerPropiedades();
         } else {
             mandadero.addRespuesta("respuesta", partida.isEstado());
+            mandadero.addRespuesta("cantGemas", partida.getMaxApuesta());
+            
         }
     }
 
@@ -36,7 +34,7 @@ public class ManejadorServicioCrearPartida implements ManejadorServicios{
 
     @Override
     public Mandadero getRespuesta() {
-        
+
         return mandadero;
     }
 }

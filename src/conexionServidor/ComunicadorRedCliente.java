@@ -1,15 +1,16 @@
 package conexionServidor;
 
 import Dominio.Jugador;
+import Dominio.TipoJugador;
 import callMessage.Mandadero;
-
+import enumServicio.EnumServicio;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import manejadorServicios.ManejadorPosicion;
+import manejadorServicios.ManejadorServicioPosicion;
 import manejadorServicios.ManejadorServicioAbandono;
 import manejadorServicios.ManejadorServicioAsignarTurno;
 import manejadorServicios.ManejadorServicioCambiarTurno;
@@ -47,7 +48,7 @@ public class ComunicadorRedCliente implements Runnable {
     public Jugador getJugador() {
         return jugador;
     }
-    
+
     public void desconectar() throws IOException {
         try {
             this.socket.close();
@@ -86,74 +87,34 @@ public class ComunicadorRedCliente implements Runnable {
 
     @Override
     public void run() {
-        try {//mande
+        try {
             Mandadero mandadero = null;
-            Mandadero msj;
+            Mandadero msj = null;
             do {
                 mandadero = (Mandadero) this.flujoEntradaDatos.readObject();
                 switch (mandadero.getTipoServicio()) {
                     case INGRESAR_PARTIDA:
-                        ms = new ManejadorServicioIngresarPartida(mandadero);
-                        ms.ejecutar(); 
-                        msj = ms.getRespuesta();
-
-                        this.jugador = (Jugador) mandadero.getParams().get("jugador");
-                        ManejadorPosicion mo = new ManejadorPosicion(mandadero, this, servidor.getClientes());
-                        mo.ejecutar();
-                        msj = mo.getRespuesta();
-                        responderATodos(msj);
-
-                        break; 
+                        ingresarPartida(mandadero, msj);
+                        break;
 
                     case CREAR_PARTIDA:
-
-                        ms = new ManejadorServicioCrearPartida(mandadero);
-                        ms.ejecutar();
-                        msj = ms.getRespuesta();
-
-                        if (mandadero.getParams().size() <= 0) {
-                            servidor.getClientes().remove(this);
-                            responderPeticion(msj);
-                        } else {
-                            this.jugador = (Jugador) mandadero.getParams().get("jugador");
-                            ManejadorPosicion mp = new ManejadorPosicion(mandadero, this, servidor.getClientes());
-                            mp.ejecutar();
-                            msj = mp.getRespuesta();
-                            responderPeticion(msj); 
-                        }
+                        this.crearPartida(mandadero, msj);
                         break;
 
                     case ENVIAR_MENSAJE:
-                        ms = new ManejadorServicioMensaje(mandadero);
-                        ms.ejecutar();
-                        msj = ms.getRespuesta();
-                        System.out.println("Llegó el pedido");
-                        responderATodos(msj);
+                        this.enviarMensaje(mandadero, msj);
                         break;
 
                     case ASIGNAR_TURNO:
-                        ms = new ManejadorServicioAsignarTurno(servidor.getClientes(), mandadero);
-                        msj = ms.getRespuesta();
-                        System.out.println(msj);
-                        System.out.println("Asignamos turno");
-                        System.out.println("SS: " + servidor.getClientes());
+                        this.asignarTurno(mandadero, msj);
                         break;
 
                     case ABANDONO_JUGADOR:
-                        ms = new ManejadorServicioAbandono(mandadero, this, servidor.getClientes());
-                        ms.ejecutar();
-                        ManejadorPosicion mp = new ManejadorPosicion(mandadero, this, servidor.getClientes());
-                        mp.ejecutar();
-                        msj = mp.getRespuesta();
-                        responderPeticion(msj); //utiliza este por que ya no esta el solicitante en la lista de clientes de servidor.
-                        responderATodos(msj);
+                        this.abandonoJugador(mandadero, msj);
                         break;
+
                     case MOVIMIENTO_FICHA:
-                        ms = new ManejadorServicioCambiarTurno(mandadero);
-                        msj = ms.getRespuesta();
-                        //responderPeticion(msj);
-                        System.out.println(msj);
-                        turnosJugadores(mandadero);
+                        this.movimientoFicha(mandadero, msj);
                         break;
 
                     default:
@@ -170,6 +131,96 @@ public class ComunicadorRedCliente implements Runnable {
 
         }
 
+    }
+
+    public Jugador getHost() {
+        if (!servidor.getClientes().isEmpty()) {
+            //el primero en la lista será el host pero cómo uso lo del enum
+//            servidor.getClientes().get(0).getJugador().setTipoJugador(TipoJugador.HOST);
+            return servidor.getClientes().get(0).getJugador();
+        }
+        return null;
+
+    }
+
+    public void ingresarPartida(Mandadero mandadero, Mandadero msj) {
+        this.jugador = (Jugador) mandadero.getParams().get("jugador");
+        ms = new ManejadorServicioIngresarPartida(mandadero);
+        ms.ejecutar();
+//        msj = ms.getRespuesta();
+        this.posicionarJugador(mandadero, msj);
+
+    }
+
+    public void crearPartida(Mandadero mandadero, Mandadero msj) {
+        this.jugador = (Jugador) mandadero.getParams().get("jugador");
+        ms = new ManejadorServicioCrearPartida(mandadero);
+        ms.ejecutar();
+        msj = ms.getRespuesta();
+
+        if (mandadero.getParams().size() <= 0) {
+            servidor.getClientes().remove(this);
+            responderPeticion(msj);
+        } else {
+            this.posicionarJugador(mandadero, msj);
+//            this.jugador = (Jugador) mandadero.getParams().get("jugador");
+//            ManejadorServicioPosicion mp = new ManejadorServicioPosicion(mandadero, this, servidor.getClientes());
+//            mp.ejecutar();
+//            msj = mp.getRespuesta();
+//            responderPeticion(msj);
+////            msj.setTipoServicio(EnumServicio.POSICIONAR_JUGADOR);
+//            responderPeticion(msj);
+//            System.out.println(msj.getRespuesta());
+        }
+    }
+
+    public void asignarTurno(Mandadero mandadero, Mandadero msj) {
+        ms = new ManejadorServicioAsignarTurno(servidor.getClientes(), mandadero);
+        ms.ejecutar();
+//        this.posicionarJugador(mandadero, msj);
+//        this.jugador = (Jugador) mandadero.getParams().get("jugador");//asignarTurno no trae jugador
+        ManejadorServicioPosicion mo = new ManejadorServicioPosicion(mandadero, this, servidor.getClientes());
+        mo.ejecutar();
+        msj = mo.getRespuesta();
+//        msj.setTipoServicio(EnumServicio.POSICIONAR_JUGADOR);
+        responderATodos(msj);
+        System.out.println(msj.getRespuesta() + " posicionar");
+    }
+
+    public void abandonoJugador(Mandadero mandadero, Mandadero msj) {
+        ms = new ManejadorServicioAbandono(mandadero, this, servidor.getClientes());
+        ms.ejecutar();
+        msj = ms.getRespuesta();
+        responderPeticion(msj);
+
+        this.posicionarJugador(mandadero, msj);
+    }
+
+    public void enviarMensaje(Mandadero mandadero, Mandadero msj) {
+        ms = new ManejadorServicioMensaje(mandadero);
+        ms.ejecutar();
+        msj = ms.getRespuesta();
+        responderATodos(msj);
+
+    }
+
+    public void movimientoFicha(Mandadero mandadero, Mandadero msj) {
+        ms = new ManejadorServicioCambiarTurno(mandadero);
+        msj = ms.getRespuesta();
+        //responderPeticion(msj);
+//        System.out.println(msj);
+        turnosJugadores(mandadero);
+
+    }
+
+    public void posicionarJugador(Mandadero mandadero, Mandadero msj) {
+        
+        ManejadorServicioPosicion mo = new ManejadorServicioPosicion(mandadero, this, servidor.getClientes());
+        mo.ejecutar();
+        msj = mo.getRespuesta();
+        msj.setTipoServicio(EnumServicio.POSICIONAR_JUGADOR);
+        responderATodos(msj);
+//        System.out.println(msj.getRespuesta() + " posicionar");
     }
 
 }

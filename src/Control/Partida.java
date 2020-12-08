@@ -1,8 +1,8 @@
-
 package Control;
 
-import Dominio.Jugador;
 //import Graphics.Forma;
+import Dominio.Jugador;
+import Dominio.TipoJugador;
 import conexionServidor.ComunicadorRedCliente;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +24,11 @@ public class Partida {
     private int tamTablero;
     private ComunicadorRedCliente jugadorActual;
 
-  
-    
-
     public static Partida getInstance() {
-        
+
         if (partida == null) {
             partida = new Partida();
-        } 
+        }
         return partida;
     }
 
@@ -63,13 +60,13 @@ public class Partida {
     public void setCantJugadores(int cantJugadores) {
         this.cantJugadores = cantJugadores;
     }
-    
+
     public List<ComunicadorRedCliente> getJugadores() {
         return jugadores;
     }
 
     public boolean addJugador(ComunicadorRedCliente jugador) {
-        if (this.getJugadores().size()!=Integer.MAX_VALUE) {
+        if (this.getJugadores().size() != Integer.MAX_VALUE) {
             return this.jugadores.add(jugador);
         }
         return false;
@@ -87,7 +84,6 @@ public class Partida {
 //    public void setTablero(Tablero tablero) {
 //        this.tablero = tablero;
 //    }
-
     public int getCodigoPartida() {
         return codigoPartida;
     }
@@ -103,7 +99,6 @@ public class Partida {
 //    public void setPosicion(List<Forma> posicion) {
 //        this.posicion = posicion;
 //    }
-
     public int getTamTablero() {
         return tamTablero;
     }
@@ -111,8 +106,8 @@ public class Partida {
     public void setTamTablero(int tamTablero) {
         this.tamTablero = tamTablero;
     }
-    
-      public ComunicadorRedCliente getJugadorActual() {
+
+    public ComunicadorRedCliente getJugadorActual() {
         return jugadorActual;
     }
 

@@ -1,11 +1,5 @@
 package logicaServicio;
 
-import Dominio.Apuesta;
-import Dominio.Ficha;
-import Dominio.Jugador;
-import conexionServidor.ComunicadorRedCliente;
-
-import java.util.List;
 
 public interface IServicios {
 

@@ -24,7 +24,7 @@ public class ServidorSocket {
     public void iniciar() throws Exception {
         try {
             System.out.println("Iniciando el servidor...");
-            this.servidorSockets = new ServerSocket(this.PUERTO, 2);
+            this.servidorSockets = new ServerSocket(this.PUERTO);
             System.out.printf("Servidor iniciado en el puerto: %d %n", this.PUERTO);
 
             while (true) {
@@ -32,7 +32,7 @@ public class ServidorSocket {
 
                 if (clientes.size() <= maximoJugadores) {
                     if(Partida.getInstance().isEstado()){
-                        maximoJugadores = Partida.getInstance().getCantJugadores()-1;//la cantidad de jugadores menos el jsjsj
+                        maximoJugadores = Partida.getInstance().getCantJugadores();//la cantidad de jugadores
                     }//maybe
                     System.out.println("Nuevo cliente intentando conectarse...");
                     ComunicadorRedCliente cliente = new ComunicadorRedCliente(socket, this);
@@ -57,9 +57,10 @@ public class ServidorSocket {
     }
 
     public List<ComunicadorRedCliente> getClientes() {
-        System.out.println("Lista de clientes en ServidorSocket: "+clientes);
+//        System.out.println("Lista de clientes en ServidorSocket: "+clientes);
         return clientes;
     }
+    
     
   
 

@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package manejadorServicios;
 
 import Control.Partida;
+import Dominio.Jugador;
 import callMessage.Mandadero;
 import conexionServidor.ComunicadorRedCliente;
-//import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,22 +24,21 @@ public class ManejadorServicioAsignarTurno implements ManejadorServicios{
     }
     
     @Override
-    public void ejecutar(){
-        System.out.println("Capirotada");
-        System.out.println(jugadores);
+    public void ejecutar() {
         Collections.shuffle(jugadores);
-        System.out.println("Lista de comunicador red cliente:" +jugadores);
         Partida.getInstance().setJugadores(jugadores);
         Partida.getInstance().setJugadorActual(jugadores.get(0));
-//        System.out.println("Lista de ");
-        mandadero.addRespuesta("jugadoresRandom", jugadores);
+
+        List<Jugador> listaJugadores = new ArrayList<>();
+
+        for (int i = 0; i < this.jugadores.size(); i++) {
+            listaJugadores.add(this.jugadores.get(i).getJugador());
+        }
+        mandadero.addRespuesta("jugadoresRandom", listaJugadores);
     }
-    
+
     @Override
     public Mandadero getRespuesta(){
-        ejecutar();
-        System.out.println("Bonito");
-        System.out.println(jugadores);
         return this.mandadero;
     }
 
