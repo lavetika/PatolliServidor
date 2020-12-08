@@ -34,6 +34,7 @@ public class ManejadorServicioAsignarTurno implements ManejadorServicios{
         for (int i = 0; i < this.jugadores.size(); i++) {
             listaJugadores.add(this.jugadores.get(i).getJugador());
         }
+        Partida.getInstance().setIniciado(true);
         mandadero.addRespuesta("jugadoresRandom", listaJugadores);
     }
 

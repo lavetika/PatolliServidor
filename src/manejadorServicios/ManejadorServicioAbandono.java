@@ -34,6 +34,7 @@ public class ManejadorServicioAbandono implements ManejadorServicios {
         
         if (clientes.isEmpty()) {
             Partida.getInstance().setEstado(false);
+            Partida.getInstance().setIniciado(false);
             Partida.getInstance().setJugadorActual(null);
         }
     }

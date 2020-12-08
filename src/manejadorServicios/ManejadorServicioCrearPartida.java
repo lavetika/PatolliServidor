@@ -20,6 +20,7 @@ public class ManejadorServicioCrearPartida implements ManejadorServicios {
             establecerPropiedades();
         } else {
             mandadero.addRespuesta("respuesta", partida.isEstado());
+            mandadero.addRespuesta("iniciado", partida.isIniciado());
             mandadero.addRespuesta("cantGemas", partida.getMaxApuesta());
             
         }

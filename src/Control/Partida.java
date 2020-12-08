@@ -16,14 +16,14 @@ public class Partida {
     private List<ComunicadorRedCliente> jugadores;
     private int cantJugadores;
 //    private Tablero tablero;
-    private int codigoPartida;
     private int maxApuesta;
 //    private List<Forma> posicion;
     private static Partida partida;
     private boolean estado;
     private int tamTablero;
     private ComunicadorRedCliente jugadorActual;
-
+    private boolean iniciado;
+    
     public static Partida getInstance() {
 
         if (partida == null) {
@@ -37,6 +37,12 @@ public class Partida {
 //        this.posicion = new ArrayList<>();
     }
 
+    public void setIniciado(boolean iniciado) {
+        this.iniciado=iniciado;
+    }
+    public boolean isIniciado(){
+        return iniciado;
+    }
     public boolean isEstado() {
         return estado;
     }
@@ -84,13 +90,6 @@ public class Partida {
 //    public void setTablero(Tablero tablero) {
 //        this.tablero = tablero;
 //    }
-    public int getCodigoPartida() {
-        return codigoPartida;
-    }
-
-    public void setCodigoPartida(int codigoPartida) {
-        this.codigoPartida = codigoPartida;
-    }
 
 //    public List<Forma> getPosicion() {
 //        return posicion;

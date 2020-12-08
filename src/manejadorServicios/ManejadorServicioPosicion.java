@@ -7,7 +7,6 @@ package manejadorServicios;
 
 import Control.Partida;
 import Dominio.Jugador;
-import Dominio.TipoJugador;
 import callMessage.Mandadero;
 import conexionServidor.ComunicadorRedCliente;
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ public class ManejadorServicioPosicion implements ManejadorServicios {
         if (jugador.getHost() != null) {
             Jugador jugadorH = jugador.getHost();
             mandadero.addRespuesta("host", jugadorH);
+            mandadero.addRespuesta("iniciado", Partida.getInstance().isIniciado());
         }
     }
 
