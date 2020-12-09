@@ -38,11 +38,15 @@ public class ManejadorServicioPosicion implements ManejadorServicios {
         }
 
         mandadero.addRespuesta("posiciones", listaJugadores);
-        
+
         if (jugador.getHost() != null) {
             Jugador jugadorH = jugador.getHost();
             mandadero.addRespuesta("host", jugadorH);
             mandadero.addRespuesta("iniciado", Partida.getInstance().isIniciado());
+        }
+
+        if (jugador.isTerminada()) {
+            mandadero.addRespuesta("terminada", true);
         }
     }
 

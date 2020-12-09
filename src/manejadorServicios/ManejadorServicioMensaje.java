@@ -18,10 +18,7 @@ public class ManejadorServicioMensaje implements ManejadorServicios{
     }
     
     @Override
-    public void ejecutar() {
-        System.out.println(jugador.getNickname());
-        System.out.println(mensaje);
-        //se tiene que añadir como parámetro porque tenemos muchos tipos de resultados
+    public void ejecutar() {        
         mandadero.addRespuesta("mensaje", jugador.getNickname()+": "+mensaje);        
     }
     

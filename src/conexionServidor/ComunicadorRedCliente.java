@@ -140,14 +140,16 @@ public class ComunicadorRedCliente implements Runnable {
             return servidor.getClientes().get(0).getJugador();
         }
         return null;
+    }
 
+    public boolean isTerminada() {
+        return servidor.getClientes().size() == 1;
     }
 
     public void ingresarPartida(Mandadero mandadero, Mandadero msj) {
         this.jugador = (Jugador) mandadero.getParams().get("jugador");
         ms = new ManejadorServicioIngresarPartida(mandadero);
         ms.ejecutar();
-//        msj = ms.getRespuesta();
         this.posicionarJugador(mandadero, msj);
 
     }
@@ -163,28 +165,16 @@ public class ComunicadorRedCliente implements Runnable {
             responderPeticion(msj);
         } else {
             this.posicionarJugador(mandadero, msj);
-//            this.jugador = (Jugador) mandadero.getParams().get("jugador");
-//            ManejadorServicioPosicion mp = new ManejadorServicioPosicion(mandadero, this, servidor.getClientes());
-//            mp.ejecutar();
-//            msj = mp.getRespuesta();
-//            responderPeticion(msj);
-////            msj.setTipoServicio(EnumServicio.POSICIONAR_JUGADOR);
-//            responderPeticion(msj);
-//            System.out.println(msj.getRespuesta());
         }
     }
 
     public void asignarTurno(Mandadero mandadero, Mandadero msj) {
         ms = new ManejadorServicioAsignarTurno(servidor.getClientes(), mandadero);
         ms.ejecutar();
-//        this.posicionarJugador(mandadero, msj);
-//        this.jugador = (Jugador) mandadero.getParams().get("jugador");//asignarTurno no trae jugador
         ManejadorServicioPosicion mo = new ManejadorServicioPosicion(mandadero, this, servidor.getClientes());
         mo.ejecutar();
         msj = mo.getRespuesta();
-//        msj.setTipoServicio(EnumServicio.POSICIONAR_JUGADOR);
         responderATodos(msj);
-        System.out.println(msj.getRespuesta() + " posicionar");
     }
 
     public void abandonoJugador(Mandadero mandadero, Mandadero msj) {
@@ -207,20 +197,17 @@ public class ComunicadorRedCliente implements Runnable {
     public void movimientoFicha(Mandadero mandadero, Mandadero msj) {
         ms = new ManejadorServicioCambiarTurno(mandadero);
         msj = ms.getRespuesta();
-        //responderPeticion(msj);
-//        System.out.println(msj);
         turnosJugadores(mandadero);
 
     }
 
     public void posicionarJugador(Mandadero mandadero, Mandadero msj) {
-        
+
         ManejadorServicioPosicion mo = new ManejadorServicioPosicion(mandadero, this, servidor.getClientes());
         mo.ejecutar();
         msj = mo.getRespuesta();
         msj.setTipoServicio(EnumServicio.POSICIONAR_JUGADOR);
         responderATodos(msj);
-//        System.out.println(msj.getRespuesta() + " posicionar");
     }
 
 }
